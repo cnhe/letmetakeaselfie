@@ -1,7 +1,7 @@
 {
-  "name": "Boilerplate",
+  "name": "#letmetakeaselfie",
   "version": "0.0.1",
-  "author": "Chu Shao",
+  "author": "Christine He",
   "scripts": {
     "start": "node app.js"
   },
@@ -13,7 +13,9 @@
     "passport": "*",
     "passport-facebook": "*",
     "passport-twitter": "*",
-    "dotenv": "*"
+    "dotenv": "*",
+    "fbgraph": "*",
+    "twit": "*"
   },
   "engines": {
     "node": "0.10.x"

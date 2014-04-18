@@ -4,45 +4,52 @@ var http = require('http');
 var path = require('path');
 var handlebars = require('express3-handlebars');
 var app = express();
+//var auth = require('./auth.js');
+var graph = require('fbgraph');
+var twit = require('twit');
+var dotenv = require('dotenv');
+dotenv.load();
+
+app.get('/auth/facebook', function(req, res) {
+//app.get('./auth.js', function(req, res) {
+
+  // we don't have a code yet
+  // so we'll redirect to the oauth dialog
+  if (!req.query.code) {
+    var authUrl = graph.getOauthUrl({
+        "client_id":     process.env.FB_APPID
+      , "redirect_uri":  process.env.FB_ROOTURL
+      , "scope":         process.env.FB_SCOPE
+    });
+
+    if (!req.query.error) { //checks whether a user denied the app facebook login/permissions
+      res.redirect(authUrl);
+    } else {  //req.query.error == 'access_denied'
+      res.send('access denied');
+    }
+     return;
+  }
+
+  // code is set
+  // we'll send that and get the access token
+  graph.authorize({
+      "client_id":      process.env.FB_APPID
+    , "redirect_uri":   process.env.FB_ROOTURL
+    , "client_secret":  process.env.FB_APPSECRET
+    , "code":           req.query.code
+  }, function (err, facebookRes) {
+    res.redirect('/UserHasLoggedIn');
+  });
+
+  // user gets sent here after being authorized
+  app.get('/UserHasLoggedIn', function(req, res) {
+  res.render("index", { title: "Logged In" });
+  });
+});
 
 //route files to load
 var index = require('./routes/index');
 
-//database setup - uncomment to set up your database
-//var mongoose = require('mongoose');
-//mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/DATABASE1);
-
- // get FB authorization url
-    var authUrl = graph.getOauthUrl({
-        "client_id":     dotenv.FB_APPID
-      , "redirect_uri":  dotenv.ROOT_URL
-    });
-
-    // shows dialog
-    res.redirect(authUrl);
-
-    // after user click, auth `code` will be set
-    // we'll send that and get the access token
-    graph.authorize({
-        "client_id":      dotenv.FB_APPID
-      , "redirect_uri":   dotenv.ROOT_URL
-      , "client_secret":  dotenv.FB_APPSECRET
-      , "code":           req.query.code
-    }, function (err, facebookRes) {
-      res.redirect('/loggedIn');
-    });
-
-var options = {
-	timeout:  3000
-	, pool:     { maxSockets:  Infinity }
-	, headers:  { connection:  "keep-alive" }
-};
-
-graph
-  .setOptions(options)
-  .get("zuck", function(err, res) {
-    console.log(res); // { id: '4', name: 'Mark Zuckerberg'... }
-  });
 
 //Configures the Template engine
 app.engine('handlebars', handlebars());

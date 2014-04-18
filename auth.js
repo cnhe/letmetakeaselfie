@@ -1,6 +1,6 @@
 //load environment variables
-var dotenv = require('dotenv');
-dotenv.load();
+//var dotenv = require('dotenv');
+//dotenv.load();
 
 /*//add instagram api setup
 var ig = require('instagram-node-lib');
@@ -12,12 +12,10 @@ exports.ig = ig;*/
 
 //add fbgraph
 var graph = require('fbgraph');
-graph.set('client_id', process.env.FB_APPID);
-graph.set('client_secret', process.env.FB_APPSECRET);
 
 var twit = require('twit');
-twit.set('client_id', process.env.TWITTER_APPID);
-twit.set('client_secret', process.env.TWITTER_APPSECRET);
+//twit.set('client_id', process.env.TWITTER_APPID);
+//twit.set('client_secret', process.env.TWITTER_APPSECRET);
 
 exports.graph = graph;
 exports.twit = twit;

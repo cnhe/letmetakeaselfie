@@ -2,7 +2,7 @@
 
 <html>
 <head>
-	<title>Boilerplate</title>	
+	<title>let me take a selfie</title>	
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
@@ -21,6 +21,13 @@
       <div class="container">
       	<h1>let me take a selfie</h1>
         <a href="/auth/facebook">Login with Facebook</a>
+        <div class="row">
+            {{#each images}}
+              <div class="col-xs-4" class="images" style="text-align:center">
+                <img src="{{image}}" class="img-responsive" class="img hashtag-img"><br>
+              </div>
+            {{/each}}
+          </div>
     </div>
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
